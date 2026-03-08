@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CotW Ultimate Console v5.5 | THE WOLVES' LOG</title>
+    <title>CotW Ultimate Console | THE WOLVES' LOG</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -46,7 +46,6 @@
         .analysis-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-top: 30px; }
         .chart-container { background: var(--kain-dark-card); padding: 20px; border: 1px solid #333; border-radius: 4px; }
         
-        /* 詳細内訳リストのスタイル */
         .detail-list { margin-top: 15px; font-size: 0.75em; color: #aaa; border-top: 1px solid #333; padding-top: 10px; }
         .detail-item { display: flex; justify-content: space-between; margin-bottom: 3px; padding: 2px 5px; border-radius: 2px; }
         .detail-item:nth-child(even) { background: rgba(255,255,255,0.03); }
@@ -60,9 +59,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Combat Analysis v5.5</h1>
-
-    <div id="weakness-warning" class="warning-banner">
+    <h1>Combat Analysis</h1> <div id="weakness-warning" class="warning-banner">
         <span style="font-weight:bold; letter-spacing:1px;">⚠️ CRITICAL WEAKNESS DETECTED</span><br>
         最優先克服課題：<span id="target-weakness" style="font-weight:bold;">---</span>
     </div>
