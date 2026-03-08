@@ -3,96 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CotW Ultimate Console | THE WOLVES' LOG</title>
+    <title>CotW Ultimate Console v5.5 | THE WOLVES' LOG</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --kain-white: #f4f4f4; --kain-blue: #003399; --kain-blue-hov: #0044cc; --kain-gold: #c5a059; --kain-dark: #111; --kain-dark-card: #1a1a1a;
+            --kain-white: #f4f4f4; --kain-blue: #003399; --kain-blue-hov: #0044cc; --kain-gold: #c5a059; --kain-dark: #111;
             --win-color: #2ecc71; --lose-color: #e74c3c;
             --cat-tech: #e74c3c; --cat-def: #2ecc71; --cat-know: #3498db; --cat-exp: #9b59b6;
         }
-        body { background-color: var(--kain-dark); color: var(--kain-white); font-family: 'Helvetica Neue', sans-serif; margin: 0; padding: 20px; line-height: 1.6; }
+        body { background-color: var(--kain-dark); color: var(--kain-white); font-family: 'Helvetica Neue', sans-serif; margin: 0; padding: 20px; line-height: 1.5; }
         .container { max-width: 1100px; margin: 0 auto; border: 1px solid var(--kain-gold); padding: 30px; background: linear-gradient(145deg, #1d1d1d, var(--kain-dark)); border-radius: 4px; box-shadow: 0 0 40px rgba(197, 160, 89, 0.15); }
-        h1 { color: var(--kain-gold); text-align: center; text-transform: uppercase; letter-spacing: 5px; border-bottom: 3px solid var(--kain-blue); padding-bottom: 20px; margin: 0 0 20px; font-size: 2.2em; }
+        h1 { color: var(--kain-gold); text-align: center; text-transform: uppercase; letter-spacing: 5px; border-bottom: 3px solid var(--kain-blue); padding-bottom: 15px; margin: 0 0 20px; }
         
-        /* --- Warning Banner --- */
-        .warning-banner { background: rgba(231, 76, 60, 0.1); border: 2px solid var(--lose-color); color: var(--lose-color); padding: 15px; margin-bottom: 25px; border-radius: 4px; display: none; text-align: center; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
-        .warning-title { font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size: 1.1em; display: block; margin-bottom: 5px; }
+        .warning-banner { background: rgba(231, 76, 60, 0.1); border: 2px solid var(--lose-color); color: var(--lose-color); padding: 12px; margin-bottom: 20px; border-radius: 4px; display: none; text-align: center; }
+        
+        .section-label { display: block; margin: 20px 0 10px; color: var(--kain-gold); font-weight: bold; font-size: 0.85em; text-transform: uppercase; border-left: 3px solid var(--kain-blue); padding-left: 10px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        select, textarea, input { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 2px; font-size: 1em; }
+        
+        .score-container { background: rgba(255, 255, 255, 0.05); padding: 20px; border: 1px solid #333; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; }
+        .score-box { text-align: center; flex: 1; }
+        .score-box label { display: block; margin-bottom: 10px; font-size: 0.8em; }
+        .score-box input { width: 80px; text-align: center; font-size: 2.2em; font-weight: bold; background: #000; border-color: var(--kain-gold); color: white; border-radius: 4px; }
 
-        .section-label { display: block; margin: 25px 0 10px; color: var(--kain-gold); font-weight: bold; font-size: 0.9em; text-transform: uppercase; letter-spacing: 2px; border-left: 3px solid var(--kain-blue); padding-left: 10px; }
-        .form-grid { display: grid; grid-template-columns: repeat(4, 1fr) 1.2fr; gap: 10px; margin-bottom: 20px; }
-        select, textarea, input { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 2px; }
-        .score-input { display: flex; align-items: center; gap: 5px; }
-        .score-input input { width: 50px; text-align: center; font-weight: bold; }
-        .reason-container { background: #222; border: 1px solid #444; max-height: 350px; overflow-y: auto; padding: 20px; }
+        .reason-container { background: #222; border: 1px solid #444; max-height: 400px; overflow-y: auto; padding: 15px; }
         .reason-group { margin-bottom: 15px; }
-        .group-title { font-size: 0.75em; font-weight: bold; padding: 3px 10px; border-radius: 3px; margin-bottom: 8px; display: inline-block; color: #fff; }
-        .reason-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
-        .reason-item { display: flex; align-items: center; font-size: 0.8em; cursor: pointer; padding: 4px; position: relative; }
+        .group-title { font-size: 0.7em; font-weight: bold; padding: 2px 8px; border-radius: 3px; margin-bottom: 8px; display: inline-block; color: #fff; }
+        .reason-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+        .reason-item { display: flex; align-items: flex-start; font-size: 0.75em; cursor: pointer; padding: 6px; border-radius: 4px; transition: 0.2s; }
         .reason-item:hover { background: #333; }
-        button.main-btn { width: 100%; padding: 20px; background-color: var(--kain-blue); color: white; border: none; cursor: pointer; font-weight: bold; font-size: 1.2em; text-transform: uppercase; letter-spacing: 3px; margin-top: 15px; }
-        button.main-btn:hover { background-color: var(--kain-blue-hov); box-shadow: 0 0 15px var(--kain-blue); }
+        .reason-item input { margin-right: 10px; margin-top: 2px; }
+        .reason-desc { display: block; color: #888; font-size: 0.9em; margin-top: 2px; }
 
-        .filter-box { background: #111; border: 1px solid var(--kain-blue); padding: 20px; margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; align-items: center; }
-        .analysis-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; margin-top: 30px; }
-        .chart-container { background: var(--kain-dark-card); padding: 25px; border: 1px solid #333; border-radius: 4px; }
-        .opp-table { width: 100%; border-collapse: collapse; font-size: 0.9em; background: var(--kain-dark-card); }
-        .opp-table th, .opp-table td { padding: 12px; border-bottom: 1px solid #333; text-align: center; }
-        .opp-table th { color: var(--kain-gold); background: #222; font-size: 0.8em; }
+        .btn-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 20px; }
+        button { padding: 18px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; transition: 0.2s; letter-spacing: 2px; }
+        .main-btn { background-color: var(--kain-blue); color: white; }
+        .batch-btn { background-color: #444; color: white; }
+        .update-btn { background-color: var(--kain-gold); color: black; display: none; }
+        .danger-btn { background-color: #333; color: #888; font-size: 0.7em; padding: 8px; border-radius: 2px; }
+        .danger-btn:hover { background-color: var(--lose-color); color: white; }
 
-        .log-entry { border-left: 5px solid var(--kain-gold); background: rgba(34, 34, 34, 0.8); padding: 15px; margin-bottom: 10px; border-radius: 2px; }
-        .tag-tech { background-color: var(--cat-tech); } .tag-def { background-color: var(--cat-def); } .tag-know { background-color: var(--cat-know); } .tag-exp { background-color: var(--cat-exp); }
-        .reason-tag { padding: 2px 6px; border-radius: 3px; font-size: 0.7em; margin-right: 4px; color: white; display: inline-block; font-weight: bold; }
+        .analysis-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-top: 30px; }
+        .chart-container { background: var(--kain-dark-card); padding: 20px; border: 1px solid #333; border-radius: 4px; }
+        
+        /* 詳細内訳リストのスタイル */
+        .detail-list { margin-top: 15px; font-size: 0.75em; color: #aaa; border-top: 1px solid #333; padding-top: 10px; }
+        .detail-item { display: flex; justify-content: space-between; margin-bottom: 3px; padding: 2px 5px; border-radius: 2px; }
+        .detail-item:nth-child(even) { background: rgba(255,255,255,0.03); }
+
+        .log-entry { border-left: 5px solid var(--kain-gold); background: rgba(34, 34, 34, 0.8); padding: 18px; margin-bottom: 12px; position: relative; }
+        .entry-actions { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
+        .action-btn { padding: 5px 10px; font-size: 0.7em; background: #444; color: white; cursor: pointer; border: 1px solid #555; }
+        .reason-tag { padding: 2px 7px; border-radius: 3px; font-size: 0.7em; margin-right: 5px; color: white; font-weight: bold; display: inline-block; margin-bottom: 4px; }
+        .tag-tech { background: var(--cat-tech); } .tag-def { background: var(--cat-def); } .tag-know { background: var(--cat-know); } .tag-exp { background: var(--cat-exp); }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Combat Analysis Console</h1>
+    <h1>Combat Analysis v5.5</h1>
 
     <div id="weakness-warning" class="warning-banner">
-        <span class="warning-title">⚠️ CRITICAL WEAKNESS DETECTED</span>
-        最優先克服事項：<span id="target-weakness" style="font-weight: bold;">---</span>
+        <span style="font-weight:bold; letter-spacing:1px;">⚠️ CRITICAL WEAKNESS DETECTED</span><br>
+        最優先克服課題：<span id="target-weakness" style="font-weight:bold;">---</span>
     </div>
     
     <div id="input-form">
+        <input type="hidden" id="editing-id">
         <div class="form-grid">
             <div><label class="section-label">自キャラ</label><select id="my-char"></select></div>
             <div><label class="section-label">対戦相手</label><select id="opp-char"></select></div>
             <div><label class="section-label">相手ランク</label>
                 <select id="opp-rank">
-                    <option value="ルーキー">ルーキー</option><option value="アイアン">アイアン</option>
-                    <option value="ブロンズ">ブロンズ</option><option value="シルバー">シルバー</option>
-                    <option value="ゴールド">ゴールド</option><option value="プラチナ">プラチナ</option>
-                    <option value="ダイアモンド">ダイアモンド</option><option value="レジェンド">レジェンド</option>
-                    <option value="ワイルドレジェンド">ワイルドレジェンド</option><option value="餓狼">餓狼</option>
+                    <option value="ルーキー">ルーキー</option><option value="アイアン">アイアン</option><option value="ブロンズ">ブロンズ</option><option value="シルバー">シルバー</option><option value="ゴールド">ゴールド</option><option value="プラチナ">プラチナ</option><option value="ダイアモンド">ダイアモンド</option><option value="レジェンド">レジェンド</option><option value="ワイルドレジェンド">ワイルドレジェンド</option><option value="餓狼">餓狼</option>
                 </select>
             </div>
-            <div><label class="section-label">結果</label><select id="result"><option value="WIN">WIN</option><option value="LOSE" selected>LOSE</option></select></div>
-            <div><label class="section-label">スコア</label><div class="score-input"><input type="number" id="my-score" value="0" min="0" max="2"> <span>-</span> <input type="number" id="opp-score" value="2" min="0" max="2"></div></div>
         </div>
-        <label class="section-label">敗因（真実を複数選択せよ）</label>
-        <div class="reason-container" id="reason-container"></div>
-        <textarea id="note" rows="2" placeholder="戦術メモ：勝利あっての真実……。"></textarea>
-        <button class="main-btn" onclick="saveMatch()">記録をクラウドに刻む</button>
-    </div>
 
-    <div class="filter-box">
-        <div><small style="color:var(--kain-gold)">MY CHAR</small><select id="filter-my" onchange="render()"><option value="ALL">ALL</option></select></div>
-        <div><small style="color:var(--kain-gold)">OPP CHAR</small><select id="filter-opp" onchange="render()"><option value="ALL">ALL</option></select></div>
-        <div><small style="color:var(--kain-gold)">START</small><input type="date" id="filter-start" onchange="render()"></div>
-        <div><small style="color:var(--kain-gold)">END</small><input type="date" id="filter-end" onchange="render()"></div>
+        <div class="score-container">
+            <div class="score-box">
+                <label style="color:var(--win-color)">MY WIN</label>
+                <input type="number" id="my-score" value="0" min="0">
+            </div>
+            <div style="font-size: 2em; color: var(--kain-gold);"> - </div>
+            <div class="score-box">
+                <label style="color:var(--lose-color)">OPP WIN</label>
+                <input type="number" id="opp-score" value="0" min="0">
+            </div>
+        </div>
+
+        <label class="section-label">敗因・課題（複数選択可）</label>
+        <div class="reason-container" id="reason-container"></div>
+        <textarea id="note" rows="3" placeholder="戦術メモ：勝利あっての真実……。"></textarea>
+        
+        <div class="btn-group">
+            <button id="add-batch-btn" class="batch-btn" onclick="addSingleToBatch()">バッチに追加</button>
+            <button id="save-btn" class="main-btn" onclick="saveSingleMatch()">クラウドへ送信</button>
+            <button id="update-btn" class="update-btn" onclick="updateMatch()">変更を保存</button>
+        </div>
     </div>
 
     <div class="analysis-grid">
         <div class="chart-container">
-            <h3 style="color:var(--kain-gold); text-align:center;">属性別 敗因分布 (%)</h3>
+            <h3 style="color:var(--kain-gold); text-align:center; font-size:1em;">属性別 敗因分布</h3>
             <canvas id="reasonChart"></canvas>
+            <div id="reason-details" class="detail-list"></div>
         </div>
         <div class="chart-container">
-            <h3 style="color:var(--kain-gold); text-align:center;">対戦相手別戦績</h3>
-            <table class="opp-table">
-                <thead><tr><th>相手</th><th>試合数</th><th>勝率</th><th>平均スコア</th></tr></thead>
+            <h3 style="color:var(--kain-gold); text-align:center; font-size:1em;">対戦相手別スタッツ</h3>
+            <table class="opp-table" style="width:100%; font-size: 0.8em; border-collapse: collapse;">
+                <thead><tr><th style="color:var(--kain-gold); padding:8px; border-bottom:1px solid #333;">相手</th><th style="color:var(--kain-gold); padding:8px; border-bottom:1px solid #333;">数</th><th style="color:var(--kain-gold); padding:8px; border-bottom:1px solid #333;">勝率</th><th style="color:var(--kain-gold); padding:8px; border-bottom:1px solid #333;">平均</th></tr></thead>
                 <tbody id="opp-stats-body"></tbody>
             </table>
         </div>
@@ -100,101 +119,179 @@
 
     <div style="margin-top:40px; border-bottom:1px solid #333; display:flex; justify-content:space-between; align-items:center;">
         <h3>COMBAT LOG</h3>
-        <button onclick="clearData()" style="background:none; border:none; color:#666; cursor:pointer; font-size:0.7em;">抹消</button>
+        <button class="danger-btn" onclick="clearAllData()">全記録を抹消</button>
     </div>
     <div id="history"></div>
 </div>
 
 <script>
-    // --- クラウド同期用URL (最新) ---
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzUbVDVYicVG9zeuwT5i6LIQsutG2qz8DetCFkmuY6hw1a22sNqjJqicB2A98Qra7BXFw/exec"; 
-
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxO8O2Jm5vywrB_t6ZeazFBUDmBYPfN95-FMXAjznzRVRIrHV8jYEyQ9H-VN53i3MZ2-A/exec"; 
     const chars = ["ロック", "テリー", "カイン", "B・ジェニー", "ボックス・リーパー", "ケビン・ライアン", "ビリー・カーン", "不知火舞", "キム・ドンファン", "牙刀", "北斗丸", "アンディ・ボガード", "ジョー・東", "キム・ジェイフン", "ギース・ハワード", "ブルー・マリー", "ヴォルフガング・クラウザー", "ケン・マスターズ", "春麗", "C・ロナウド", "S・ガナッチ", "双葉ほたる", "グリフォンマスク", "プリチャ", "マルコ", "Mr.BIG"].sort();
     const reasonGroups = [
-        { label: "技術・反復（赤）", color: "#e74c3c", class: "tag-tech", items: [["操作ミス", "コマンドミスや意図しない技"], ["起き攻めミス", "技の重ねやセットプレイの失敗"], ["対空失敗", "相手のジャンプを落とせなかった"], ["コンボミス", "ダメージチャンスを逃した"], ["ヒット確認ミス", "単発確認や小技からの判断不足"], ["仕込みミス", "ガーキャン仕込みや投げ抜け仕込みなどのミス"]] },
-        { label: "防御・判断（緑）", color: "#2ecc71", class: "tag-def", items: [["投げられすぎ", "投げぬけ失敗や捨てすぎ"], ["画面端の守備", "端で凌ぎきれず押し切られた"], ["無謀な暴れ", "相手が有利な時にボタンを押した"], ["ガードミス", "中下段や切り替えのミス"], ["パニック/ぶっぱ", "焦って無敵技やボタンを押した"], ["確反逃し", "反撃確定なのに技が出せなかった"]] },
-        { label: "知識・対策（青）", color: "#3498db", class: "tag-know", items: [["確反の知識不足", "どの技に反撃が入るか不明"], ["わからん殺し", "技の性能や対処法を知らなかった"], ["セットプレイ対策不足", "特定キャラの連携が抜けられなかった"], ["システム理解不足", "REVブロウ等の使いどころの誤り"]] },
-        { label: "立ち回り・経験（紫）", color: "#9b59b6", class: "tag-exp", items: [["安易な飛び", "無計画に飛んで落とされた"], ["対応不足", "相手の行動・癖に対処できなかった"], ["立ち回り負け", "差し合いで一方的に触られた"], ["行動の偏り/手癖", "同じ行動を繰り返して読まれた"], ["読み負け・運", "最後のじゃんけんや読み合いの負け"], ["リソース管理", "オーバーヒートや使いどころのミス"]] }
+        { label: "技術・反復", color: "#e74c3c", class: "tag-tech", items: [["操作ミス", "コマンドミスや意図しない技"], ["起き攻めミス", "技の重ねやセットプレイの失敗"], ["対空失敗", "相手のジャンプを落とせなかった"], ["コンボミス", "ダメージチャンスを逃した"], ["ヒット確認ミス", "単発確認や小技からの判断不足"], ["仕込みミス", "ガーキャン仕込みや投げ抜け仕込みなどのミス"]] },
+        { label: "防御・判断", color: "#2ecc71", class: "tag-def", items: [["投げられすぎ", "投げぬけ失敗や捨てすぎ"], ["画面端の守備", "端で凌ぎきれず押し切られた"], ["無謀な暴れ", "相手が有利な時にボタンを押した"], ["ガードミス", "中下段や切り替えのミス"], ["パニック/ぶっぱ", "焦って無敵技やボタンを押した"], ["確反逃し", "反撃確定なのに技が出せなかった"]] },
+        { label: "知識・対策", color: "#3498db", class: "tag-know", items: [["確反の知識不足", "どの技に反撃が入るか不明"], ["わからん殺し", "技の性能や対処法を知らなかった"], ["セットプレイ対策不足", "特定キャラの連携が抜けられなかった"], ["システム理解不足", "REVブロウ等の使いどころの誤り"]] },
+        { label: "立ち回り・経験", color: "#9b59b6", class: "tag-exp", items: [["安易な飛び", "無計画に飛んで落とされた"], ["対応不足", "相手の行動・癖に対処できなかった"], ["立ち回り負け", "差し合いで一方的に触られた"], ["行動の偏り/手癖", "同じ行動を繰り返して読まれた"], ["読み負け・運", "最後のじゃんけんや読み合いの負け"], ["リソース管理", "オーバーヒートや使いどころのミス"]] }
     ];
 
     let matches = JSON.parse(localStorage.getItem('cotw_matches')) || [];
     let reasonChart = null;
 
     function init() {
-        const myS = document.getElementById('my-char'), oppS = document.getElementById('opp-char'), fMy = document.getElementById('filter-my'), fOpp = document.getElementById('filter-opp');
-        chars.forEach(c => { myS.add(new Option(c, c)); oppS.add(new Option(c, c)); fMy.add(new Option(c, c)); fOpp.add(new Option(c, c)); });
+        const myS = document.getElementById('my-char'), oppS = document.getElementById('opp-char');
+        chars.forEach(c => { myS.add(new Option(c, c)); oppS.add(new Option(c, c)); });
         myS.value = "カイン";
         const container = document.getElementById('reason-container');
         reasonGroups.forEach(g => {
-            const groupDiv = document.createElement('div'); groupDiv.className = 'reason-group'; groupDiv.innerHTML = `<div class="group-title" style="background:${g.color}">${g.label}</div>`;
+            const groupDiv = document.createElement('div'); groupDiv.className = 'reason-group';
+            groupDiv.innerHTML = `<div class="group-title" style="background:${g.color}">${g.label}</div>`;
             const grid = document.createElement('div'); grid.className = 'reason-grid';
-            g.items.forEach(([t, d]) => { grid.innerHTML += `<label class="reason-item" title="${d}"><input type="checkbox" name="r-check" value="${t}" data-class="${g.class}"> ${t}</label>`; });
+            g.items.forEach(([t, d]) => { 
+                grid.innerHTML += `<label class="reason-item"><input type="checkbox" name="r-check" value="${t}" data-class="${g.class}"> <div><strong>${t}</strong><span class="reason-desc">${d}</span></div></label>`; 
+            });
             groupDiv.appendChild(grid); container.appendChild(groupDiv);
         });
         render();
     }
 
-    async function saveMatch() {
+    function createMatchObj() {
         const checkboxes = document.querySelectorAll('input[name="r-check"]:checked');
-        const selectedReasons = Array.from(checkboxes).map(cb => ({ title: cb.value, class: cb.dataset.class }));
-        const match = { id: Date.now(), my: document.getElementById('my-char').value, opp: document.getElementById('opp-char').value, rank: document.getElementById('opp-rank').value, res: document.getElementById('result').value, myS: parseInt(document.getElementById('my-score').value), oppS: parseInt(document.getElementById('opp-score').value), reasons: selectedReasons, note: document.getElementById('note').value, date: new Date().toLocaleString('ja-JP'), isoDate: new Date().toISOString() };
-        const btn = document.querySelector('.main-btn'); btn.disabled = true;
-        try { await fetch(GAS_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(match) }); matches.unshift(match); localStorage.setItem('cotw_matches', JSON.stringify(matches)); document.getElementById('note').value = ''; checkboxes.forEach(cb => cb.checked = false); render(); } 
-        catch (e) { alert("通信エラー"); } finally { btn.disabled = false; }
+        const now = new Date();
+        const myS = parseInt(document.getElementById('my-score').value) || 0;
+        const oppS = parseInt(document.getElementById('opp-score').value) || 0;
+        return {
+            id: document.getElementById('editing-id').value || Date.now() + Math.floor(Math.random() * 1000),
+            my: document.getElementById('my-char').value, opp: document.getElementById('opp-char').value,
+            rank: document.getElementById('opp-rank').value, res: myS > oppS ? 'WIN' : 'LOSE',
+            myS: myS, oppS: oppS,
+            reasons: Array.from(checkboxes).map(cb => ({ title: cb.value, class: cb.dataset.class })),
+            note: document.getElementById('note').value, date: now.toLocaleString('ja-JP'), isoDate: now.toISOString()
+        };
+    }
+
+    async function saveSingleMatch() {
+        const data = createMatchObj();
+        try {
+            await fetch(GAS_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "create", match: data }) });
+            matches.unshift(data); finalizeSave();
+        } catch (e) { matches.unshift(data); finalizeSave(); }
+    }
+
+    function editEntry(id) {
+        const m = matches.find(x => x.id == id);
+        if(!m) return;
+        document.getElementById('editing-id').value = m.id;
+        document.getElementById('my-char').value = m.my;
+        document.getElementById('opp-char').value = m.opp;
+        document.getElementById('opp-rank').value = m.rank;
+        document.getElementById('my-score').value = m.myS;
+        document.getElementById('opp-score').value = m.oppS;
+        document.getElementById('note').value = m.note;
+        document.querySelectorAll('input[name="r-check"]').forEach(cb => { cb.checked = m.reasons.some(r => r.title === cb.value); });
+        document.getElementById('save-btn').style.display = 'none';
+        document.getElementById('update-btn').style.display = 'block';
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    async function updateMatch() {
+        const data = createMatchObj();
+        try {
+            await fetch(GAS_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "update", match: data }) });
+            const idx = matches.findIndex(x => x.id == data.id);
+            matches[idx] = data; finalizeSave();
+            document.getElementById('update-btn').style.display = 'none';
+            document.getElementById('save-btn').style.display = 'block';
+        } catch (e) { alert("更新エラー"); }
+    }
+
+    async function deleteEntry(id) {
+        if(!confirm("抹消するか？")) return;
+        const m = matches.find(x => x.id == id);
+        try {
+            await fetch(GAS_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "delete", match: m }) });
+            matches = matches.filter(x => x.id != id); finalizeSave();
+        } catch (e) { alert("削除失敗"); }
+    }
+
+    function clearAllData() { if(confirm("全記録を抹消するか？")) { matches = []; localStorage.removeItem('cotw_matches'); render(); } }
+
+    function finalizeSave() { localStorage.setItem('cotw_matches', JSON.stringify(matches)); resetInputs(); render(); }
+
+    function resetInputs() {
+        document.getElementById('editing-id').value = '';
+        document.getElementById('my-score').value = 0;
+        document.getElementById('opp-score').value = 0;
+        document.getElementById('note').value = '';
+        document.querySelectorAll('input[name="r-check"]').forEach(cb => cb.checked = false);
     }
 
     function render() {
-        const fMy = document.getElementById('filter-my').value, fOpp = document.getElementById('filter-opp').value, fStart = document.getElementById('filter-start').value, fEnd = document.getElementById('filter-end').value;
-        const filtered = matches.filter(m => {
-            const d = new Date(m.isoDate || m.id);
-            return (fMy === "ALL" || m.my === fMy) && (fOpp === "ALL" || m.opp === fOpp) && (!fStart || d >= new Date(fStart + "T00:00:00")) && (!fEnd || d <= new Date(fEnd + "T23:59:59"));
-        });
-
-        let counts = { tech: 0, def: 0, know: 0, exp: 0 }, oStats = {}, allReasons = {};
-        filtered.forEach(m => {
-            if(m.res === 'LOSE') {
-                m.reasons.forEach(r => { 
-                    if(r.class==='tag-tech') counts.tech++; 
-                    if(r.class==='tag-def') counts.def++; 
-                    if(r.class==='tag-know') counts.know++; 
-                    if(r.class==='tag-exp') counts.exp++; 
-                    allReasons[r.title] = (allReasons[r.title] || 0) + 1;
-                });
-            }
+        let counts = { tech: 0, def: 0, know: 0, exp: 0 }, oStats = {}, allReasons = {}, reasonGroupsCount = {};
+        const hist = document.getElementById('history'); hist.innerHTML = '';
+        
+        matches.forEach(m => {
+            m.reasons.forEach(r => {
+                if (r.class==='tag-tech') counts.tech++; if (r.class==='tag-def') counts.def++; 
+                if (r.class==='tag-know') counts.know++; if (r.class==='tag-exp') counts.exp++;
+                allReasons[r.title] = (allReasons[r.title] || 0) + 1;
+                // カテゴリ別の敗因詳細を集計
+                if(!reasonGroupsCount[r.class]) reasonGroupsCount[r.class] = {};
+                reasonGroupsCount[r.class][r.title] = (reasonGroupsCount[r.class][r.title] || 0) + 1;
+            });
             if(!oStats[m.opp]) oStats[m.opp] = {w:0, l:0, ms:0, os:0};
             if(m.res === 'WIN') oStats[m.opp].w++; else oStats[m.opp].l++;
-            oStats[m.opp].ms += m.myS; oStats[m.opp].os += m.oppS;
+            oStats[m.opp].ms += (m.myS || 0); oStats[m.opp].os += (m.oppS || 0);
+
+            const sColor = m.myS > m.oppS ? 'var(--win-color)' : (m.myS < m.oppS ? 'var(--lose-color)' : 'var(--kain-white)');
+            hist.innerHTML += `<div class="log-entry"><div class="entry-actions"><button class="action-btn" onclick="editEntry(${m.id})">EDIT</button><button class="action-btn" style="color:red;" onclick="deleteEntry(${m.id})">DEL</button></div><div style="font-size:1.1em; font-weight:bold; margin-bottom:8px;">${m.my} <span style="font-size:0.8em; color:#888;">VS</span> <span class="rank-badge">${m.rank}</span>${m.opp} <span style="color:${sColor}; margin-left:10px;">${m.myS}-${m.oppS}</span></div><div>${m.reasons.map(r => `<span class="reason-tag ${r.class}">${r.title}</span>`).join('')}</div><div style="color:#aaa; font-size:0.85em; margin-top:8px; padding-top:8px; border-top:1px dotted #444;">${m.note || '---'} <span style="float:right; color:#666;">${m.date}</span></div></div>`;
         });
 
-        // Update Warning
-        const warnBanner = document.getElementById('weakness-warning');
-        const targetText = document.getElementById('target-weakness');
-        const topReason = Object.keys(allReasons).reduce((a, b) => allReasons[a] > allReasons[b] ? a : b, "");
-        if(topReason) {
-            warnBanner.style.display = 'block';
-            targetText.innerText = `${topReason} (${allReasons[topReason]}回)`;
-        } else {
-            warnBanner.style.display = 'none';
-        }
+        const top = Object.keys(allReasons).reduce((a, b) => allReasons[a] > allReasons[b] ? a : b, "");
+        const warn = document.getElementById('weakness-warning');
+        if(top) { warn.style.display='block'; document.getElementById('target-weakness').innerText = `${top} (${allReasons[top]}回)`; } else { warn.style.display='none'; }
 
-        updateChart(counts);
+        // チャートと詳細内訳の更新
+        const total = counts.tech + counts.def + counts.know + counts.exp;
+        updateReasonAnalytics(counts, total, reasonGroupsCount);
+
         const tbody = document.getElementById('opp-stats-body'); tbody.innerHTML = '';
-        Object.keys(oStats).forEach(o => { const s = oStats[o], total = s.w+s.l; tbody.innerHTML += `<tr><td>${o}</td><td>${total}</td><td style="color:${(s.w/total)>=0.5?'var(--win-color)':'var(--lose-color)'}">${((s.w/total)*100).toFixed(1)}%</td><td>${(s.ms/total).toFixed(1)}-${(s.os/total).toFixed(1)}</td></tr>`; });
-
-        const hist = document.getElementById('history'); hist.innerHTML = '';
-        filtered.forEach(m => { hist.innerHTML += `<div class="log-entry"><div style="display:flex; justify-content:space-between;"><strong>${m.my} vs <span class="rank-badge">${m.rank}</span>${m.opp} (${m.myS}-${m.oppS})</strong><span style="color:${m.res==='WIN'?'var(--win-color)':'var(--lose-color)'}; font-weight:bold;">${m.res}</span></div><div style="margin:5px 0;">${m.reasons.map(r => `<span class="reason-tag ${r.class}">${r.title}</span>`).join('')}</div><div style="color:#aaa; font-size:0.85em; border-top:1px dotted #444; padding-top:5px; margin-top:5px;">${m.note || '---'}<span style="float:right;">${m.date}</span></div></div>`; });
+        Object.keys(oStats).forEach(o => {
+            const s = oStats[o], tS = s.w+s.l, wr = (s.w/tS*100).toFixed(0);
+            tbody.innerHTML += `<tr><td style="padding:8px; border-bottom:1px solid #333;">${o}</td><td style="padding:8px; border-bottom:1px solid #333;">${tS}</td><td style="padding:8px; border-bottom:1px solid #333; color:${wr>=50?'var(--win-color)':'var(--lose-color)'}">${wr}%</td><td style="padding:8px; border-bottom:1px solid #333;">${(s.ms/tS).toFixed(1)}-${(s.os/tS).toFixed(1)}</td></tr>`;
+        });
     }
 
-    function updateChart(c) {
-        const total = c.tech + c.def + c.know + c.exp;
+    function updateReasonAnalytics(counts, total, details) {
         const ctx = document.getElementById('reasonChart').getContext('2d');
         if (reasonChart) reasonChart.destroy();
-        const labels = ["技術・反復", "防御・判断", "知識・対策", "立ち回り・経験"];
-        const data = [c.tech, c.def, c.know, c.exp];
-        const formattedLabels = labels.map((l, i) => total > 0 ? `${l} (${((data[i]/total)*100).toFixed(1)}%)` : l);
-        reasonChart = new Chart(ctx, { type: 'doughnut', data: { labels: formattedLabels, datasets: [{ data: data, backgroundColor: ['#e74c3c', '#2ecc71', '#3498db', '#9b59b6'], borderWidth: 0 }] }, options: { cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#f4f4f4', font: { size: 10 } } } } } });
+        const data = [counts.tech, counts.def, counts.know, counts.exp];
+        const colors = ['#e74c3c', '#2ecc71', '#3498db', '#9b59b6'];
+        const labels = ["技術", "防御", "知識", "経験"].map((l, i) => total ? `${l} (${(data[i]/total*100).toFixed(1)}%)` : l);
+        reasonChart = new Chart(ctx, { type: 'doughnut', data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 0 }] }, options: { cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#f4f4f4', font: { size: 10 } } } } } });
+
+        // 詳細リストの生成
+        const detailDiv = document.getElementById('reason-details');
+        detailDiv.innerHTML = '';
+        if(total === 0) return;
+
+        const catClasses = { 'tag-tech': '技術', 'tag-def': '防御', 'tag-know': '知識', 'tag-exp': '経験' };
+        Object.keys(details).forEach(catClass => {
+            const catHeader = document.createElement('div');
+            catHeader.style.cssText = `color:${colors[Object.keys(catClasses).indexOf(catClass)]}; font-weight:bold; margin-top:10px; border-bottom:1px solid #444;`;
+            catHeader.innerText = `【${catClasses[catClass]}】の内訳`;
+            detailDiv.appendChild(catHeader);
+
+            const items = details[catClass];
+            const sortedItems = Object.keys(items).sort((a,b) => items[b] - items[a]);
+            sortedItems.forEach(title => {
+                const perc = (items[title] / total * 100).toFixed(1);
+                const itemEl = document.createElement('div');
+                itemEl.className = 'detail-item';
+                itemEl.innerHTML = `<span>${title}</span><span>${items[title]}回 (${perc}%)</span>`;
+                detailDiv.appendChild(itemEl);
+            });
+        });
     }
-    function clearData() { if(confirm('全記録を消去するか？')) { matches=[]; localStorage.removeItem('cotw_matches'); render(); } }
     window.onload = init;
 </script>
 </body>
